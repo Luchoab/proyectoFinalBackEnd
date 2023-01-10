@@ -1,16 +1,11 @@
 //Configurar servidor express para que siempre este escuchando.
-const express = require('express');
 const mongoose  = require('mongoose');
-const app = express();
 const port = 3001;
+const app = require('./server');
 
 //Vinculasmos la base de datos.
 const password = 'SWh5DubdRvNI6nUh'
 const URL = `mongodb+srv://proyectoFinal:${password}@proyectofinlabackend.ipvbroy.mongodb.net/test`;
-
-//Llamamos al schema de usuarios
-const User = require('./schemas/user.schema')
-
 
 
 //Nos conectamos a la base de dato con mongoose y funcion async.
@@ -31,9 +26,4 @@ async function main(){
 
 main().catch(error => console.error('\x1b[31m Error al conectar a la base de datos \x1b[37m',error));
 
-
-// Llamamos al edpoint con un metodo (get,post,delete,etc) y funciones que queremos ejectuar.
-app.get('/', (req,res)=>{
-    res.send('Hola desde el home')
-})
 
