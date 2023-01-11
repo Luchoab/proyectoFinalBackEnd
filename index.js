@@ -5,7 +5,7 @@ const app = require('./server');
 
 //Vinculasmos la base de datos.
 const password = 'SWh5DubdRvNI6nUh'
-const URL = `mongodb+srv://proyectoFinal:${password}@proyectofinlabackend.ipvbroy.mongodb.net/test`;
+const URL = `mongodb+srv://proyectoFinal:${password}@proyectofinlabackend.ipvbroy.mongodb.net/proyectoFinal`;
 
 
 //Nos conectamos a la base de dato con mongoose y funcion async.
