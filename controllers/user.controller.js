@@ -1,5 +1,6 @@
 //Aqui se escribiran las funciones para los usuarios.
-const User = require('../schemas/user.schema.js')
+const User = require('../schemas/user.schema.js');
+
 //Funcion para leer los usuarios.
 
 async function getUsers(req,res){
@@ -14,7 +15,7 @@ try {
         name: req.body.name,
         lastName: req.body.lastName,
         email: req.body.email,
-        age: +req.body.age,
+        age: req.body.age,
         active: req.body.active || true
     })
 

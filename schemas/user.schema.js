@@ -23,12 +23,12 @@ email: {
     minglength:8,
     maxlength:30
 },
-age: {
-    type: Number,
-    required: true,
-    min:15,
-    max:120,
-},
+// age: {
+//     type: Number,
+//     required: true,
+//     min:15,
+//     max:120,
+// },
 
 active: {
     type:Boolean,
