@@ -23,6 +23,11 @@ email: {
     minglength:8,
     maxlength:30
 },
+password:{
+    type:String,
+    minlength:3,
+    maxlength:10
+},
 age: {
     type: Number,
     required: true,

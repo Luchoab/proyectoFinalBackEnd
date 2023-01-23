@@ -12,8 +12,9 @@ api.get('/users', usersControllers.getUsers)
 //POST para cargar usuarios
 api.post('/users', usersControllers.addUsers)
 //PUT para actualizar usuarios
-api.put('users')
+api.put('/users/:idParam', usersControllers.updateUser)
 //DELETE para eliminar usuarios
 api.delete('/users')
-
+//Login 
+api.post('/login', usersControllers.login)
 module.exports = api;
