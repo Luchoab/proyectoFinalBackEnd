@@ -23,6 +23,18 @@ email: {
     minglength:8,
     maxlength:30
 },
+password: {
+    type: String,
+    required:true,
+    minglength:8,
+    maxlength:30
+},
+confirmPassword: {
+    type: String,
+    required:true,
+    minglength:8,
+    maxlength:30
+},
 // age: {
 //     type: Number,
 //     required: true,

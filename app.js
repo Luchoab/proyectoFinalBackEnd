@@ -2,6 +2,9 @@ const express = require ('express');
 const app = express();
 const user_routes = require('./routes/user.routes');
 
+const methodOverride = require ('method-override');
+const session = require('express-session');
+
 const cors = require('cors');
 
 app.get('/',(req, res)=>{
@@ -16,8 +19,15 @@ app.get('/',(req, res)=>{
 
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({extended: true}))
+//metodo para autenticar el usuario
+app.use(express.urlencoded({extended: true}));
+app.use(methodOverride('method'));
+app.use(session({
+    secret: 'mysecretapp',
+    resave: true,
+    saveUninitialized: true,
 
+}))
 app.use(user_routes);
 
 
