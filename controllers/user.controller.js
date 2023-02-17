@@ -45,16 +45,19 @@ try {
 
 
     const userSaved = await userToSave.save()
-        res.json('El usuario ha sido creado correctamente')
+        
 
     if(!userSaved){
-        res.json('El usuario no se guardo correctamente')
+        return res.status(401).json('El usuario no se guardo correctamente')
     }
+
+    return res.status(200).json('El usuario ha sido creado correctamente')
+
 
 } catch (error) {
     console.log(error);
 
-    res.status(400).json({
+    return  res.status(400).json({
         msg:'Error al crear usuario',
         ok:false
     })
