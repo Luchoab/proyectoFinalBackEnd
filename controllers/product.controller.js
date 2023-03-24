@@ -13,7 +13,7 @@ async function addProduct (req, res) {
             name: req.body.name,
             description: req.body.description,
             info: req.body.info,
-            ordered: req.body.ordered || false
+            price: req.body.price
         })
         await productToSave.save();
         res.status(200).send('El producto se agrego con exito');

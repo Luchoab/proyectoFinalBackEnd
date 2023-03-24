@@ -1,5 +1,9 @@
 //Aqui se escribiran las funciones para los usuarios.
 const User = require('../schemas/user.schema.js');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const secret = "m4ld3asf¿asp¿!!!jjaskspdA.-asa";
+const saltRounds = 10;
 
 //Funcion para leer los usuarios.
 
@@ -10,71 +14,88 @@ async function getUsers(req,res){
 }
 
 async function addUsers(req,res){
-try {
-    const userToSave = new User({
-        name: req.body.name,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        age: req.body.age,
-        active: req.body.active || true
-    })
-
-    const userSaved = await userToSave.save()
-    res.json('El usuario ha sido creado correctamente')
-
-    if(!userSaved){
-        res.json('El usuario no se guardo correctamente')
+    let password = req.body.password;
+    try{
+        const userToSave = new User({
+            name: req.body.name,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            password: req.body.password,
+            role: req.body.role,
+            active: req.body.active || true
+        })
+        userToSave.email = userToSave.email?.toLowerCase();
+        const checkEmail = await User.findOne({ email: userToSave.email });
+        if(checkEmail) return res.status(400).send("Email en uso");
+        const hash = await bcrypt.hash(password, saltRounds);
+        console.log(hash);
+        userToSave.password = hash;
+        const userSaved = await userToSave.save(); 
+        console.log(userSaved)
+        userSaved.password = undefined;
+        return res.send({            
+            msg: 'Creacion exitosa',
+            ok: true,
+            user: userSaved
+        });
+    } catch(error) {
+        console.log(error);
+        res.send({ 
+            msg: 'No se pudo guardar el usuario',
+            ok: false
+    });
     }
-} catch (error) {
-    console.log(error);
-
-    res.status(400).json({
-        msg:'Error al crear usuario',
-        ok:false
-    })
 }
+
+async function delUser (req, res) {
+    try {
+        console.log(req.params.id);
+        const id = req.params.id;
+        const deletedUser = await User.findByIdAndDelete(id);
+        if(!deletedUser) return res.status(404).send(`El id ${id} no se ha encontrado`);
+        return res.status(200).send('Usuario borrado');
+    } catch (error) {
+        console.log(error);
+        res.status(400).send('Error al borrar usuario');
+    }
 }
 
 async function login(req,res){
-try {
-    //Captar datos 
-    const email = req.body.email;
-    const password = req.body.password
-    //Buscar si existen los datos en la base de datos
-    const user = await User.findOne({email:email});
-    //Comparar usuarios
-    if (!user){
-        return res.json({
-            msg:'No se encontro el usuario',
-            ok:false
+    try {
+        const email = req.body.email;
+        const password = req.body.password;
+        const user = await User.findOne({ email: email});
+        const result = await bcrypt.compare(password, user.password);
+        if (!user) return res.status(404).send({
+            msg: "Usuario no encontrado",
+            ok: false
         })
-    }   
-    const passwordUser = await User.find({password:password})
-
-    if(passwordUser){
-        return res.status(200).json({
-            msg:'Login correcto',
-            ok:true
+        if(!result) {
+            return res.status(404).send({
+                msg: 'Login incorrecto', 
+                ok: false
+            })
+        }
+        
+        const token = await jwt.sign(user.toJSON(), secret, { expiresIn: '2h' });
+        if(user) return res.status(200).send({
+            msg: 'Login exitoso',
+            ok: true,
+            token,
+            user
         })
-    }else{
-        return res.status(404).json({
-            msg:'La contraseña es incorrecta',
-            ok:false
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({
+            msg: "Error al loguearse",
+            ok: false
         })
     }
-
-
-} catch (error) {
-    res.status(400).json({
-        msg:'Error al logearse',
-        ok:false
-    })
-}
 }
 
 async function updateUser(req,res){
     try {
-        const id = req.params.idParam
+        const id = req.params.id
 
         const user = await User.findById(id);
         if(!user){
@@ -104,6 +125,7 @@ function formatMsg(res,code,msg,ok){
 module.exports = {
     getUsers,
     addUsers,
+    delUser,
     login,
     updateUser
 }
