@@ -9,4 +9,7 @@ api.post('/products', productController.addProduct);
 
 api.delete('/products/:id', productController.delProduct);
 
+api.put('/products/:id', productController.updateProduct);
+
+
 module.exports = api;

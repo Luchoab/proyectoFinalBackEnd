@@ -36,8 +36,29 @@ async function delProduct (req, res) {
     }
 }
 
+async function updateProduct(req,res){
+    try {
+        const id = req.params.id
+
+        const product = await Product.findById(id);
+        if(!product){
+            return formatMsg(res,404,`No se encontro el usuario`,false)
+        }
+        const update = req.body
+        const productUpdate = await Product.findByIdAndUpdate(id,update,{new:true}).select({password:0})
+
+        console.log(productUpdate);
+        return res.status(200).send('producto editado')
+
+
+    } catch (error) {
+        res.status(400).send('error')
+    }
+}
+
 module.exports = {
     getProducts,
     addProduct,
-    delProduct
+    delProduct,
+    updateProduct
 }
