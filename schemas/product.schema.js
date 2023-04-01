@@ -6,7 +6,7 @@ const productSchema = new Schema({
     url: {type: String, required: true},
     description: {type: String, required: true, minlength: 30},
     info: {type: String, required: true, minlength: 30},
-    price: {type: Number, required: true}
+    price: {type: Number, required: true},
 });
 
 module.exports = mongoose.model('Producto', productSchema);
