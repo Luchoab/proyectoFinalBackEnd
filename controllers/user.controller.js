@@ -10,8 +10,12 @@ const saltRounds = process.env.SALT;
 //Funcion para leer los usuarios.
 
 async function getUsers(req,res){
-    const userDB = await User.find();
-    res.json(userDB)
+    const page = req.query.page;
+    const limit = process.env.PAGE_LIMIT;
+    const dbUsers = await User.find({}, { password: 0 }).limit(limit).skip(page * limit);
+    const totalUsers = await User.countDocuments();
+    res.send({total: totalUsers,
+        users: dbUsers});
 }
 
 async function addUsers(req,res){
