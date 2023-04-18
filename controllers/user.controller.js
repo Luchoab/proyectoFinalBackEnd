@@ -1,9 +1,11 @@
 //Aqui se escribiran las funciones para los usuarios.
+
+require ('dotenv').config({path:'./.env'});
 const User = require('../schemas/user.schema.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const secret = "m4ld3asf¿asp¿!!!jjaskspdA.-asa";
-const saltRounds = 10;
+const secret = process.env.SECRET_KEY;
+const saltRounds = process.env.SALT;
 
 //Funcion para leer los usuarios.
 

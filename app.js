@@ -4,17 +4,12 @@ const user_routes = require('./routes/user.routes');
 const product_routes = require('./routes/product.routes');
 const order_routes = require('./routes/order.routes');
 
+
 const cors = require('cors');
 
 app.get('/',(req, res)=>{
-    res.send('hello');
+    res.send('server working');
 });
-
-// app.get('/users', async(req, res)=>{
-//      const usersFromDB = await User.find();
-//      console.log(usersFromDB);
-//     res.send(usersFromDB)
-// });
 
 app.use(cors());
 app.use(express.json());

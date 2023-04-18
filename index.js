@@ -1,22 +1,19 @@
 // Configurar servidor express para que siempre este escuchando.
 const mongoose = require ('mongoose');
 const app = require('./app');
-const port = 3001;
 
-
+require ('dotenv').config({path:'./.env'});
 
 // Vinculamos la base de datos.
-const password = '36439779'
-const URL = `mongodb+srv://salamino:${password}@clustersam.d8zvhgz.mongodb.net/ProyectoFinal-RC`;
 
 async function dbConnect() {
 
     mongoose.set('strictQuery', false);
-    await mongoose.connect(URL)
-    console.log('conexion correcta');
+    await mongoose.connect(process.env.DB_CONNECTION)
+    console.log('conexion correcta con la db');
 
-    app.listen(port,()=>{
-        console.log(`Servidor express escuchando en el puerto ${port}`)
+    app.listen(process.env.PORT,()=>{
+        console.log(`Servidor express escuchando en el puerto ${process.env.PORT}`)
     })
 }
 
