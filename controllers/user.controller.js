@@ -11,7 +11,6 @@ const saltRounds = process.env.SALT;
 
 async function getUsers(req,res){
     const userDB = await User.find();
-    console.log(userDB)
     res.json(userDB)
 }
 
@@ -30,10 +29,8 @@ async function addUsers(req,res){
         const checkEmail = await User.findOne({ email: userToSave.email });
         if(checkEmail) return res.status(400).send("Email en uso");
         const hash = await bcrypt.hash(password, saltRounds);
-        console.log(hash);
         userToSave.password = hash;
         const userSaved = await userToSave.save(); 
-        console.log(userSaved)
         userSaved.password = undefined;
         return res.send({            
             msg: 'Creacion exitosa',
@@ -41,7 +38,6 @@ async function addUsers(req,res){
             user: userSaved
         });
     } catch(error) {
-        console.log(error);
         res.send({ 
             msg: 'No se pudo guardar el usuario',
             ok: false
@@ -51,13 +47,11 @@ async function addUsers(req,res){
 
 async function delUser (req, res) {
     try {
-        console.log(req.params.id);
         const id = req.params.id;
         const deletedUser = await User.findByIdAndDelete(id);
         if(!deletedUser) return res.status(404).send(`El id ${id} no se ha encontrado`);
         return res.status(200).send('Usuario borrado');
     } catch (error) {
-        console.log(error);
         res.status(400).send('Error al borrar usuario');
     }
 }
@@ -87,7 +81,6 @@ async function login(req,res){
             user
         })
     } catch (error) {
-        console.log(error)
         res.status(400).send({
             msg: "Error al loguearse",
             ok: false
@@ -104,9 +97,8 @@ async function updateUser(req,res){
             return formatMsg(res,404,`No se encontro el usuario`,false)
         }
         const update = req.body
-        const userUpdate = await User.findByIdAndUpdate(id,update,{new:true}).select({password:0})
+        await User.findByIdAndUpdate(id,update,{new:true}).select({password:0})
 
-        console.log(userUpdate);
 
         formatMsg(res,200,`Actualizar usuario ${id}`,true)
 
